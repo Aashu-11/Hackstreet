@@ -12,6 +12,8 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import base64
 from io import BytesIO
+from sentence_transformers import SentenceTransformer
+import yake
 
 # Set page config
 st.set_page_config(
@@ -29,7 +31,276 @@ def download_nltk_resources():
 
 download_nltk_resources()
 
-# Define helper functions for API calls
+# Cache the model loading to avoid reloading on each rerun
+@st.cache_resource
+def load_sentence_transformer():
+    try:
+        return SentenceTransformer('all-MiniLM-L6-v2')
+    except Exception as e:
+        st.error(f"Error loading SentenceTransformer model: {str(e)}")
+        return None
+
+# Local keyword extraction using YAKE
+def extract_keywords_with_yake(text, max_ngram_size=2, num_keywords=20):
+    """Extract keywords using YAKE (Yet Another Keyword Extractor)"""
+    if not text or text == "No abstract available" or len(text.strip()) < 10:
+        return {}
+    
+    try:
+        # Configure YAKE
+        language = "en"
+        max_ngram_size = max_ngram_size  # 1 for unigrams, 2 for bigrams
+        deduplication_threshold = 0.9  # Threshold for duplicate removal
+        deduplication_algo = 'seqm'  # Sequence matcher for deduplication
+        windowSize = 1
+        
+        # Create the keyword extractor
+        kw_extractor = yake.KeywordExtractor(
+            lan=language, 
+            n=max_ngram_size, 
+            dedupLim=deduplication_threshold, 
+            dedupFunc=deduplication_algo, 
+            windowsSize=windowSize,
+            top=num_keywords
+        )
+        
+        # Extract keywords
+        keywords = kw_extractor.extract_keywords(text)
+        
+        # Convert to dict format (keyword: score)
+        # Note: In YAKE, lower scores are better, so we invert for consistency
+        keywords_dict = {kw: 1.0/(score+0.1) for kw, score in keywords}
+        
+        return keywords_dict
+    except Exception as e:
+        st.warning(f"Error in YAKE keyword extraction: {str(e)}")
+        return {}
+
+# Local keyword extraction using sentence-transformers (KeyBERT approach)
+def extract_keywords_with_transformer(text, title="", model=None, n=20):
+    """Extract keywords using sentence-transformers (similar to KeyBERT)"""
+    if not text or text == "No abstract available" or len(text.strip()) < 10:
+        return {}
+    
+    if model is None:
+        model = load_sentence_transformer()
+        if model is None:
+            return {}
+    
+    try:
+        # Combine text and title if both available
+        if title and title.strip():
+            full_text = title + " " + text
+        else:
+            full_text = text
+            
+        # Create candidate keywords/phrases using n-grams
+        words = full_text.lower().split()
+        n_gram_range = (1, 2)
+        
+        # Extract n-grams
+        count = 0
+        candidates = []
+        for n in range(n_gram_range[0], n_gram_range[1] + 1):
+            for i in range(0, len(words) - n + 1):
+                candidate = " ".join(words[i:i+n])
+                if len(candidate) > 3:  # Only include reasonably sized candidates
+                    candidates.append(candidate)
+                    count += 1
+                if count >= 200:  # Limit the number of candidates
+                    break
+        
+        # Remove duplicates and stopwords
+        stop_words = set(stopwords.words('english'))
+        candidates = [c for c in candidates if not all(w in stop_words for w in c.split())]
+        candidates = list(set(candidates))[:200]  # Limit to 200 unique candidates
+        
+        if not candidates:
+            return {}
+        
+        # Get document embeddings
+        doc_embedding = model.encode([full_text])[0]
+        
+        # Get candidate embeddings
+        candidate_embeddings = model.encode(candidates)
+        
+        # Calculate similarity scores
+        similarities = cosine_similarity([doc_embedding], candidate_embeddings)[0]
+        
+        # Create dictionary of keywords with scores
+        keywords = {candidates[i]: float(similarities[i]) for i in range(len(candidates))}
+        
+        # Sort by score and take top n
+        keywords = dict(sorted(keywords.items(), key=lambda x: x[1], reverse=True)[:n])
+        
+        return keywords
+    except Exception as e:
+        st.warning(f"Error in transformer-based keyword extraction: {str(e)}")
+        return {}
+
+# Define helper functions for extract_keywords
+def extract_keywords_from_title(title, n=10):
+    """Extract keywords from title when abstract is not available"""
+    if not title:
+        return {}
+    
+    # Create a single-document corpus for TF-IDF
+    corpus = [title]
+    
+    # Instantiate TF-IDF vectorizer
+    vectorizer = TfidfVectorizer(
+        max_features=50,
+        stop_words='english',
+        ngram_range=(1, 2)  # Include both unigrams and bigrams
+    )
+    
+    # Fit and transform the corpus
+    try:
+        tfidf_matrix = vectorizer.fit_transform(corpus)
+        
+        # Get feature names and TF-IDF scores
+        feature_names = vectorizer.get_feature_names_out()
+        tfidf_scores = tfidf_matrix.toarray()[0]
+        
+        # Sort keywords by TF-IDF score
+        sorted_idx = np.argsort(tfidf_scores)[::-1]
+        
+        # Create a dictionary of keyword:score
+        keywords = {feature_names[idx]: float(tfidf_scores[idx]) for idx in sorted_idx[:n]}
+        
+        return keywords
+    except:
+        return {}
+
+# Enhanced keyword extraction function
+def extract_keywords(text, title="", n=20, extraction_method="tfidf"):
+    """Extract top n keywords from text with multiple methods"""
+    keywords = {}
+    
+    # Try the selected extraction method
+    if extraction_method == "tfidf":
+        # Traditional TF-IDF approach
+        if text and text != "No abstract available":
+            # Create a single-document corpus for TF-IDF
+            corpus = [text]
+            
+            # Instantiate TF-IDF vectorizer
+            vectorizer = TfidfVectorizer(
+                max_features=100,
+                stop_words='english',
+                ngram_range=(1, 2)  # Include both unigrams and bigrams
+            )
+            
+            # Fit and transform the corpus
+            try:
+                tfidf_matrix = vectorizer.fit_transform(corpus)
+                
+                # Get feature names and TF-IDF scores
+                feature_names = vectorizer.get_feature_names_out()
+                tfidf_scores = tfidf_matrix.toarray()[0]
+                
+                # Sort keywords by TF-IDF score
+                sorted_idx = np.argsort(tfidf_scores)[::-1]
+                
+                # Create a dictionary of keyword:score
+                keywords = {feature_names[idx]: float(tfidf_scores[idx]) for idx in sorted_idx[:n]}
+            except Exception as e:
+                st.warning(f"TF-IDF extraction error: {str(e)}")
+    
+    elif extraction_method == "yake":
+        # Use YAKE for keyword extraction
+        combined_text = title
+        if text and text != "No abstract available":
+            combined_text += " " + text
+            
+        keywords = extract_keywords_with_yake(combined_text, num_keywords=n)
+    
+    elif extraction_method == "transformer":
+        # Use transformer model for keyword extraction
+        combined_text = text
+        if text == "No abstract available" or not text:
+            combined_text = title
+            
+        keywords = extract_keywords_with_transformer(combined_text, title, n=n)
+    
+    # If we couldn't extract keywords or got too few with the primary method, try title
+    if not keywords or len(keywords) < n // 2:
+        # Try extracting from title as backup
+        title_keywords = extract_keywords_from_title(title, n)
+        
+        # If we got keywords from title and we already have some keywords, merge them
+        if title_keywords:
+            if keywords:
+                # Merge dictionaries, favoring higher scores
+                for k, v in title_keywords.items():
+                    if k not in keywords or keywords[k] < v:
+                        keywords[k] = v
+            else:
+                keywords = title_keywords
+    
+    # If we still don't have enough keywords, return what we have
+    if not keywords or len(keywords) < 3:
+        return {}
+    
+    return keywords
+
+def preprocess_text(text):
+    """Clean and tokenize text"""
+    if not text or text == "No abstract available":
+        return []
+    
+    # Convert to lowercase and remove special characters
+    text = re.sub(r'[^\w\s]', '', text.lower())
+    # Tokenize
+    tokens = nltk.word_tokenize(text)
+    # Remove stopwords
+    stop_words = set(stopwords.words('english'))
+    tokens = [word for word in tokens if word not in stop_words and len(word) > 2]
+    return tokens
+
+def generate_wordcloud(keywords, width=800, height=400):
+    """Generate a word cloud image from keywords"""
+    if not keywords:
+        # Create a placeholder image with text
+        fig, ax = plt.subplots(figsize=(12, 6))
+        ax.text(0.5, 0.5, "No keywords available", 
+                horizontalalignment='center', 
+                verticalalignment='center',
+                fontsize=18)
+        ax.axis('off')
+        
+        # Convert plot to image
+        buf = BytesIO()
+        fig.savefig(buf, format='png', bbox_inches='tight', pad_inches=0)
+        buf.seek(0)
+        plt.close(fig)
+        return buf
+    
+    wc = WordCloud(
+        width=width,
+        height=height,
+        background_color='white',
+        colormap='viridis',
+        max_words=50,
+        max_font_size=100
+    )
+    
+    # Generate word cloud
+    wc.generate_from_frequencies(keywords)
+    
+    # Create a figure and plot the word cloud
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.imshow(wc, interpolation='bilinear')
+    ax.axis('off')
+    
+    # Convert plot to image
+    buf = BytesIO()
+    fig.savefig(buf, format='png', bbox_inches='tight', pad_inches=0)
+    buf.seek(0)
+    plt.close(fig)
+    
+    return buf
+
 def search_openalex(query, page=1, per_page=10, filter_string=""):
     """Search OpenAlex API for works matching the query"""
     base_url = "https://api.openalex.org/works"
@@ -115,97 +386,6 @@ def format_openalex_works(works_data):
     
     return pd.DataFrame(formatted_works)
 
-def preprocess_text(text):
-    """Clean and tokenize text"""
-    if not text or text == "No abstract available":
-        return []
-    
-    # Convert to lowercase and remove special characters
-    text = re.sub(r'[^\w\s]', '', text.lower())
-    # Tokenize
-    tokens = nltk.word_tokenize(text)
-    # Remove stopwords
-    stop_words = set(stopwords.words('english'))
-    tokens = [word for word in tokens if word not in stop_words and len(word) > 2]
-    return tokens
-
-def extract_keywords(text, n=20):
-    """Extract top n keywords from text using TF-IDF"""
-    if not text or text == "No abstract available":
-        return {}
-    
-    # Create a single-document corpus for TF-IDF
-    corpus = [text]
-    
-    # Instantiate TF-IDF vectorizer
-    vectorizer = TfidfVectorizer(
-        max_features=100,
-        stop_words='english',
-        ngram_range=(1, 2)  # Include both unigrams and bigrams
-    )
-    
-    # Fit and transform the corpus
-    try:
-        tfidf_matrix = vectorizer.fit_transform(corpus)
-        
-        # Get feature names and TF-IDF scores
-        feature_names = vectorizer.get_feature_names_out()
-        tfidf_scores = tfidf_matrix.toarray()[0]
-        
-        # Sort keywords by TF-IDF score
-        sorted_idx = np.argsort(tfidf_scores)[::-1]
-        
-        # Create a dictionary of keyword:score
-        keywords = {feature_names[idx]: float(tfidf_scores[idx]) for idx in sorted_idx[:n]}
-        
-        return keywords
-    except:
-        st.warning("Could not extract keywords from this text.")
-        return {}
-
-def generate_wordcloud(keywords, width=800, height=400):
-    """Generate a word cloud image from keywords"""
-    if not keywords:
-        # Create a placeholder image with text
-        fig, ax = plt.subplots(figsize=(12, 6))
-        ax.text(0.5, 0.5, "No keywords available", 
-                horizontalalignment='center', 
-                verticalalignment='center',
-                fontsize=18)
-        ax.axis('off')
-        
-        # Convert plot to image
-        buf = BytesIO()
-        fig.savefig(buf, format='png', bbox_inches='tight', pad_inches=0)
-        buf.seek(0)
-        plt.close(fig)
-        return buf
-    
-    wc = WordCloud(
-        width=width,
-        height=height,
-        background_color='white',
-        colormap='viridis',
-        max_words=50,
-        max_font_size=100
-    )
-    
-    # Generate word cloud
-    wc.generate_from_frequencies(keywords)
-    
-    # Create a figure and plot the word cloud
-    fig, ax = plt.subplots(figsize=(12, 6))
-    ax.imshow(wc, interpolation='bilinear')
-    ax.axis('off')
-    
-    # Convert plot to image
-    buf = BytesIO()
-    fig.savefig(buf, format='png', bbox_inches='tight', pad_inches=0)
-    buf.seek(0)
-    plt.close(fig)
-    
-    return buf
-
 def rank_works_by_keyword(works_df, selected_keyword):
     """Rank works based on relevance to a selected keyword"""
     if works_df.empty:
@@ -242,6 +422,54 @@ def rank_works_by_keyword(works_df, selected_keyword):
 def main():
     st.title("📚 Keyword & Concept Explorer")
     st.markdown("Explore academic papers and extract key concepts using the [OpenAlex API](https://docs.openalex.org)")
+    
+    # Configure keyword extraction settings in sidebar
+    with st.sidebar:
+        st.header("Keyword Extraction Settings")
+        extraction_method = st.selectbox(
+            "Keyword Extraction Method", 
+            ["tfidf", "yake", "transformer"],
+            format_func=lambda x: {
+                "tfidf": "TF-IDF (Fast)",
+                "yake": "YAKE (Balanced)",
+                "transformer": "Transformer (High Quality)"
+            }.get(x, x)
+        )
+        
+        # Display information about each method
+        if extraction_method == "tfidf":
+            st.info("TF-IDF is fast but may not capture semantic meaning well.")
+        elif extraction_method == "yake":
+            st.info("YAKE is a good balance of speed and quality.")
+        elif extraction_method == "transformer":
+            st.info("Transformer-based approach gives higher quality results but is slower.")
+            # If using transformer method, we'll preload the model
+            if extraction_method == "transformer":
+                with st.spinner("Loading language model..."):
+                    load_sentence_transformer()
+        
+        st.markdown("---")
+        st.write("### About")
+        st.write("This app uses the OpenAlex API to search for academic papers and extract keywords.")
+        st.write("All keyword extraction is done locally without requiring external API keys.")
+    
+    # Show requirements installation guide
+    with st.sidebar.expander("Setup Requirements"):
+        st.markdown("""
+        Make sure to install these libraries:
+        ```
+        pip install streamlit pandas numpy nltk scikit-learn wordcloud matplotlib requests
+        pip install yake sentence-transformers
+        ```
+        """)
+    
+    # Add a "Try Demo" button under the Smart Search section
+    with st.sidebar:
+        st.markdown("---")
+        st.header("Smart Search")
+        st.markdown("Experience our advanced search capabilities.")
+        if st.button("Try Demo"):
+            st.markdown("[Click here to try the demo](http://localhost:8503/)", unsafe_allow_html=True)
     
     # Create tabs
     tab1, tab2, tab3 = st.tabs(["Search OpenAlex", "Extract Keywords", "Paper Explorer"])
@@ -393,7 +621,10 @@ def main():
             
             # Show abstract
             st.subheader("Abstract")
-            st.write(paper['abstract'])
+            if paper['abstract'] and paper['abstract'] != "No abstract available":
+                st.write(paper['abstract'])
+            else:
+                st.warning("No abstract available for this paper. Keywords will be extracted from the title and using available concepts.")
             
             # Show OpenAlex concepts
             st.subheader("OpenAlex Concepts")
@@ -412,8 +643,14 @@ def main():
             
             if extract_button or 'keywords' not in st.session_state or st.session_state['keywords'] is None:
                 # Extract keywords
-                with st.spinner("Extracting keywords..."):
-                    keywords = extract_keywords(paper['abstract'], n=num_keywords)
+                with st.spinner(f"Extracting keywords using {extraction_method.upper()}..."):
+                    # Use enhanced keyword extraction with selected method
+                    keywords = extract_keywords(
+                        paper['abstract'], 
+                        title=paper['title'],
+                        n=num_keywords,
+                        extraction_method=extraction_method
+                    )
                     
                     # Store in session state
                     st.session_state['keywords'] = keywords
@@ -429,7 +666,12 @@ def main():
                             })
                             st.dataframe(keyword_df, hide_index=True)
                         else:
-                            st.warning("Could not extract keywords from this abstract.")
+                            st.error("Could not extract keywords. Please try these options:")
+                            st.markdown("""
+                            1. Try a different extraction method from the sidebar
+                            2. Check if the paper has enough textual content for keyword extraction
+                            3. Try a different paper with an available abstract
+                            """)
             else:
                 with col2:
                     st.subheader("Extracted Keywords")
@@ -510,7 +752,12 @@ def main():
                                     st.write(f"**Citations:** {work['citation_count']}")
                                     if work['doi']:
                                         st.write(f"**DOI:** [Link to paper]({work['doi']})")
-                                    st.write(f"**Abstract:** {work['abstract']}")
+                                    
+                                    # Display abstract if available
+                                    if work['abstract'] and work['abstract'] != "No abstract available":
+                                        st.write(f"**Abstract:** {work['abstract']}")
+                                    else:
+                                        st.write("**Abstract:** No abstract available")
                                     
                                     # Display keywords
                                     if work['keywords']:
