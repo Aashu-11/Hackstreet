@@ -1,0 +1,8 @@
+streamlit
+pandas
+numpy
+plotly
+sentence-transformers
+scikit-learn
+requests
+altair
