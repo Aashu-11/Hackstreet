@@ -63,14 +63,10 @@ def build_faiss_index(journals, _model):
         f"{j['display_name']} — {j.get('abbreviated_title','')}\nScope: {j.get('description','')}"
         for j in journals
     ]
-
-    # Precompute embedding dimension
     dim = _model.encode(["test"], convert_to_numpy=True).shape[1]
     index = faiss.IndexFlatIP(dim)
 
-    # Create a progress bar
     progress_bar = st.progress(0.0)
-
     batch_size = 32
     total = len(texts)
     for i in range(0, total, batch_size):
@@ -78,8 +74,6 @@ def build_faiss_index(journals, _model):
         embs = _model.encode(batch, convert_to_numpy=True)
         faiss.normalize_L2(embs)
         index.add(embs)
-
-        # Clamp progress between 0.0 and 1.0
         progress = min(1.0, (i + batch_size) / total)
         progress_bar.progress(progress)
 
@@ -163,6 +157,11 @@ def main():
     indexing_opts = ["Scopus", "Web of Science", "UGC CARE", "Google Scholar"]
     selected_indexing = st.sidebar.multiselect("Require Indexing In", indexing_opts)
 
+    # ——— NEW: dropdown for number of recs ———
+    num_rec = st.sidebar.slider(
+        "Number of recommendations", min_value=1, max_value=10, value=3, step=1
+    )
+
     # inputs
     title = st.text_input("Paper Title")
     abstract = st.text_area("Paper Abstract", height=200)
@@ -188,9 +187,9 @@ def main():
 
         recs = recommend_journals(query, journals, index, embedder, selected_domains, top_k=10)
 
-        # apply metric filters and show top 3
+        # apply metric filters and show top `num_rec`
         shown = 0
-        st.subheader("Top Recommendations")
+        st.subheader(f"Top {num_rec} Recommendations")
         for r in recs:
             m = fetch_metrics(r["issn"])
             if not (impact_min <= m["impact_factor"] <= impact_max):
@@ -208,7 +207,7 @@ def main():
             st.markdown(f"- Indexing: {', '.join(m['indexing'])}")
             st.markdown(f"- [Official site / OpenAlex page]({r['url']})")
             st.write("")  # spacer
-            if shown >= 3:
+            if shown >= num_rec:
                 break
 
         if shown == 0:
