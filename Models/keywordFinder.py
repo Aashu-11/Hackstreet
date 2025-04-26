@@ -463,14 +463,6 @@ def main():
         ```
         """)
     
-    # Add a "Try Demo" button under the Smart Search section
-    with st.sidebar:
-        st.markdown("---")
-        st.header("Smart Search")
-        st.markdown("Experience our advanced search capabilities.")
-        if st.button("Try Demo"):
-            st.markdown("[Click here to try the demo](http://localhost:8503/)", unsafe_allow_html=True)
-    
     # Create tabs
     tab1, tab2, tab3 = st.tabs(["Search OpenAlex", "Extract Keywords", "Paper Explorer"])
     
