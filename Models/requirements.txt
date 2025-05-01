@@ -7,3 +7,4 @@ scikit-learn
 requests
 altair
 faiss-cpu
+spacy
