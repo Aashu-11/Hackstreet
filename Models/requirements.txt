@@ -6,3 +6,4 @@ sentence-transformers
 scikit-learn
 requests
 altair
+faiss-cpu

@@ -654,7 +654,6 @@ def main():
                             # Display keyword table
                             keyword_df = pd.DataFrame({
                                 'Keyword': list(keywords.keys()),
-                                'Score': list(keywords.values())
                             })
                             st.dataframe(keyword_df, hide_index=True)
                         else:
@@ -672,7 +671,6 @@ def main():
                         # Display keyword table
                         keyword_df = pd.DataFrame({
                             'Keyword': list(st.session_state['keywords'].keys()),
-                            'Score': list(st.session_state['keywords'].values())
                         })
                         st.dataframe(keyword_df, hide_index=True)
                     else:
