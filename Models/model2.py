@@ -16,9 +16,10 @@ def load_spacy_model():
     try:
         return spacy.load("en_core_web_sm")
     except OSError:
-        import subprocess
-        subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"], check=True)
+        # Instead of using subprocess, use spaCy's built-in download function
+        spacy.cli.download("en_core_web_sm")
         return spacy.load("en_core_web_sm")
+
 
 # ————————————————————————————————————
 # 2. Load embedding model
