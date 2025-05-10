@@ -20,7 +20,6 @@ def load_spacy_model():
         spacy.cli.download("en_core_web_sm")
         return spacy.load("en_core_web_sm")
 
-
 # ————————————————————————————————————
 # 2. Load embedding model
 @st.cache_resource(show_spinner=False, ttl=24*3600)
@@ -144,11 +143,29 @@ def main():
     st.title("🎓 AI Journal Recommender")
     st.write("Paste your paper title and abstract, then hit **Suggest Journals**.")
 
-    # load or fetch journals once
-    if "journals" not in st.session_state:
-        with st.spinner("Loading journal database…"):
-            st.session_state.journals = fetch_openalex_journals()
-    journals = st.session_state.journals
+    # Adding error handling for journal loading
+    try:
+        # load or fetch journals once
+        if "journals" not in st.session_state:
+            with st.spinner("Loading journal database…"):
+                st.session_state.journals = fetch_openalex_journals()
+        journals = st.session_state.journals
+    except Exception as e:
+        st.error(f"Error loading journals: {str(e)}")
+        st.stop()
+        return
+
+    # Adding error handling for models
+    try:  
+        # Preload models to avoid errors during recommendation
+        with st.spinner("Loading NLP models..."):
+            nlp = load_spacy_model()
+            embedder = load_embedder()
+    except Exception as e:
+        st.error(f"Error loading NLP models: {str(e)}")
+        st.info("Try installing spaCy models manually with: !python -m spacy download en_core_web_sm")
+        st.stop()
+        return
 
     # sidebar filters
     domains = extract_journal_domains(journals)
@@ -173,20 +190,28 @@ def main():
             return
 
         query = f"{title} {abstract}"
-        embedder = load_embedder()
-        nlp = load_spacy_model()
-
+        
         # topics
         with st.spinner("Extracting key topics…"):
-            topics = extract_key_phrases(query, nlp)
-        st.subheader("Key Topics")
-        st.write(" • ".join(topics) or "N/A")
+            try:
+                topics = extract_key_phrases(query, nlp)
+                st.subheader("Key Topics")
+                st.write(" • ".join(topics) or "N/A")
+            except Exception as e:
+                st.error(f"Error extracting topics: {str(e)}")
+                st.stop()
+                return
 
         # build and query index
-        with st.spinner("Building recommendation index…"):
-            index = build_faiss_index(journals, embedder)
+        try:
+            with st.spinner("Building recommendation index…"):
+                index = build_faiss_index(journals, embedder)
 
-        recs = recommend_journals(query, journals, index, embedder, selected_domains, top_k=10)
+            recs = recommend_journals(query, journals, index, embedder, selected_domains, top_k=10)
+        except Exception as e:
+            st.error(f"Error generating recommendations: {str(e)}")
+            st.stop()
+            return
 
         # apply metric filters and show top `num_rec`
         shown = 0
