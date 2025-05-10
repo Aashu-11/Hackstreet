@@ -8,3 +8,4 @@ requests
 altair
 faiss-cpu
 spacy
+nltk
