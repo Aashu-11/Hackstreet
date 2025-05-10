@@ -9,3 +9,4 @@ altair
 faiss-cpu
 spacy
 nltk
+wordcloud
