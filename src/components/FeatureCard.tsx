@@ -58,11 +58,11 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description, del
         className="mt-6 text-[#E4FD75] flex items-center gap-2 font-medium group-hover:translate-x-2 transition-transform duration-300"
         onClick={() => {
           if (title === "Journal Suggestions") {
-            window.location.href = "http://localhost:8501/";
+            window.location.href = "https://corefunctionality.streamlit.app/";
           } else if (title === "Trending Analysis") {
-            window.location.href = "http://localhost:8502/";
+            window.location.href = "https://dashboardforanalysis.streamlit.app/";
           }else if(title === "Smart Search"){
-            window.location.href = "http://localhost:8503/";
+            window.location.href = "https://keywordfinder.streamlit.app/";
           }else if(title === "MesmerizeAbstractBot"){
             window.location.href = "http://localhost:5174/";
           }
