@@ -64,7 +64,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description, del
           }else if(title === "Smart Search"){
             window.location.href = "https://keywordfinder.streamlit.app/";
           }else if(title === "MesmerizeAbstractBot"){
-            window.location.href = "http://localhost:5174/";
+            window.location.href = "https://journalsensebot.vercel.app/";
           }
         }}
       >
