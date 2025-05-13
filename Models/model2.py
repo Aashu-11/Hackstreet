@@ -4,6 +4,8 @@ import numpy as np
 import faiss
 import random
 import spacy
+import subprocess
+import sys
 from collections import Counter
 from sentence_transformers import SentenceTransformer
 
@@ -13,12 +15,43 @@ st.set_page_config(page_title="AI Journal Recommender", layout="wide")
 # 1. Load spaCy for topic extraction
 @st.cache_resource(show_spinner=False)
 def load_spacy_model():
+    """
+    Load spaCy model with robust fallback mechanisms.
+    This function handles different failure scenarios when loading the model.
+    """
+    # First try simple loading
     try:
         return spacy.load("en_core_web_sm")
     except OSError:
-        import subprocess
-        subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"], check=True)
-        return spacy.load("en_core_web_sm")
+        st.info("Downloading spaCy model, this may take a moment...")
+        
+        try:
+            # Try using pip to install the model directly
+            subprocess.check_call([
+                sys.executable, 
+                "-m", 
+                "pip", 
+                "install", 
+                "--no-cache-dir", 
+                "en_core_web_sm"
+            ])
+            return spacy.load("en_core_web_sm")
+        except Exception as e:
+            # If pip install fails, try the spacy download command
+            try:
+                subprocess.check_call([
+                    sys.executable, 
+                    "-m", 
+                    "spacy", 
+                    "download", 
+                    "en_core_web_sm",
+                    "--direct"  # Try direct download
+                ])
+                return spacy.load("en_core_web_sm")
+            except Exception as e2:
+                # Last resort: use the small model without linguistic features
+                st.warning("Could not download spaCy model. Using blank model as fallback.")
+                return spacy.blank("en")  # Fallback to blank model which is always available
 
 # ————————————————————————————————————
 # 2. Load embedding model
