@@ -35,8 +35,7 @@ def load_spacy_model():
             )
             
             if result.returncode != 0:
-                st.error(f"Failed to download spaCy model. Using fallback method.")
-                st.code(f"Error: {result.stderr}")
+                
                 
                 # Fallback to using small model that doesn't need downloading
                 return spacy.blank("en")
