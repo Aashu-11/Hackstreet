@@ -145,7 +145,7 @@ def extract_key_phrases(text, nlp, top_k=5):
         counts = Counter(noun_chunks).most_common(top_k)
         return [phrase for phrase, _ in counts]
     except Exception as e:
-        st.warning(f"Error extracting keyphrases: {str(e)}")
+     
         # Extract simple fallback phrases by splitting on common separators
         words = text.split()
         return [' '.join(words[i:i+2]) for i in range(0, min(len(words), top_k*3), 2)][:top_k]
