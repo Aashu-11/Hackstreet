@@ -91,9 +91,7 @@ JournalSense combines powerful AI technologies to create a seamless recommendati
 Our system processes abstracts through multiple layers of analysis to match semantic meaning, methodological approach, and scope requirements.
 
 </td>
-<td width="40%">
-<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMTY5ZDdjM2FkZGUyZDVlZThkNzBiYWI3OTcwMGM5YjIyYmY2MWY1MyZjdD1n/l378z4mKhut3GQrJu/giphy.gif" width="100%" alt="AI Tech">
-</td>
+
 </tr>
 </table>
 
