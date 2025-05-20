@@ -82,7 +82,7 @@ def fetch_openalex_data(endpoint, params=None):
     params['mailto'] = 'example@domain.com'  # Replace with your email
     
     headers = {
-        'User-Agent': 'OpenAlex_Scholarly_Dashboard/1.0',
+        'User-Agent': 'Scholarly_Dashboard/1.0',
         'Accept': 'application/json'
     }
     
