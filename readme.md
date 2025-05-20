@@ -95,8 +95,7 @@ JournalSense leverages cutting-edge AI to analyze your research and connect it w
 
 JournalSense combines powerful AI technologies to create a seamless recommendation experience:
 
-- 🧠 **Google Gemini API** - Advanced NLP understanding of research content
-- 🔍 **FAISS (Facebook AI Similarity Search)** - Lightning-fast vector similarity search
+- 🔍 **FAISS (Facebook AI Similarity Search)** & **Cosine Similarity** - Lightning-fast vector similarity search
 - 📊 **SpaCy** - Sophisticated NLP processing and entity extraction
 - 📋 **TF-IDF** - Topic modeling and content relevance scoring
 - 🌐 **Streamlit** - Beautiful, responsive web interface
@@ -150,10 +149,9 @@ Our system processes abstracts through multiple layers of analysis to match sema
 <tr>
 <td>
 
-- 🏆 **95% Accuracy** in journal recommendation testing
 - 🚀 Reduced search time from hours to **seconds**
 - 📊 Database of **10,000+** academic journals across disciplines
-- 🧠 Custom embedding model trained on **2 million+** academic abstracts
+- 🧠 Custom embedding model trained on **large scale** academic abstracts
 - 🌐 Successfully integrated with academic databases (OpenAlex, Semantic Scholar)
 - 🔄 Real-time journal trend analysis for maximum relevance
 
@@ -177,26 +175,6 @@ Our system processes abstracts through multiple layers of analysis to match sema
 - The importance of domain expertise in natural language processing
 - User experience design for researchers and academics
 
-## 🔮 Future Scope
-
-<table>
-<tr>
-<td width="60%">
-
-- 📱 Mobile app development for on-the-go researchers
-- 🔄 Integration with reference management software (Zotero, Mendeley)
-- 🌐 Expanded language support beyond English
-- 🤝 Journal editor connection platform
-- 📊 Personalized impact tracking post-publication
-- 🧩 Plugin ecosystem for specialized research fields
-- 🔐 Institutional accounts for universities and research labs
-
-</td>
-<td>
-<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY2NiYTc4NmFmODdiYzhkN2ZkMTliZDRiZDVmMzU1NTA0OWQ0NDQ1ZiZjdD1n/JWuBH9rCO2uZuHBFpm/giphy.gif" width="100%" alt="Future Vision">
-</td>
-</tr>
-</table>
 
 <!-- Animated Divider -->
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
@@ -273,18 +251,6 @@ streamlit run app.py
 <!-- Animated Divider -->
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" alt="Divider">
 
-## 🧠 TL;DR
-
-<div align="center">
-  <table width="100%">
-    <tr>
-      <td align="center">
-        <h3>JournalSense helps researchers find the perfect journals for their papers using AI.</h3>
-        <p>Save time, increase acceptance rates, and maximize your research impact.</p>
-      </td>
-    </tr>
-  </table>
-</div>
 
 ## 🔗 Useful Links
 
@@ -306,45 +272,8 @@ streamlit run app.py
 <!-- Animated Divider -->
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
-## 📊 Project Stats
-
-<div align="center">
-  <img src="https://img.shields.io/github/stars/yourusername/journalsense?style=for-the-badge&color=yellow" alt="Stars">
-  <img src="https://img.shields.io/github/forks/yourusername/journalsense?style=for-the-badge&color=blue" alt="Forks">
-  <img src="https://img.shields.io/github/issues/yourusername/journalsense?style=for-the-badge&color=red" alt="Issues">
-  <img src="https://img.shields.io/github/license/yourusername/journalsense?style=for-the-badge&color=green" alt="License">
-</div>
-
-<details>
-<summary>📋 Frequently Asked Questions</summary>
-<br>
-
-### How accurate are the journal recommendations?
-Our system has been tested with published papers and achieves a 95% success rate in identifying journals where papers were eventually accepted.
-
-### Does JournalSense work for all research fields?
-Yes! We cover STEM, Social Sciences, Humanities, Arts, and interdisciplinary fields with specialized models for each domain.
-
-### How recent is your journal database?
-Our database updates weekly, pulling from OpenAlex and Semantic Scholar to ensure the most current journal information.
-
-### Is my research data secure?
-Absolutely. Your abstracts and titles are processed securely and never stored permanently in our systems.
-
-### Does JournalSense help with formatting requirements?
-Yes, we provide template guidelines specific to each recommended journal.
-
-### Can I get recommendations for preprint servers too?
-Yes, our system includes arXiv, bioRxiv, medRxiv, and other major preprint repositories in its recommendations when appropriate.
-
-</details>
-
-<div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=100&section=footer" width="100%">
-</div>
-
 > "Finding the right journal shouldn't be harder than the research itself."
 
 <div align="center">
-  <sub>Built with ❤️ by the JournalSense Team</sub>
+  <sub>Built with ❤️ by the Team HackStreet</sub>
 </div>
