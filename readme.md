@@ -182,7 +182,7 @@ Our system processes abstracts through multiple layers of analysis to match sema
 ## 📺 Demo Video
 
 <div align="center">
-  <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+  <a href="https://youtu.be/Iufg7Jv1BSw">
     <img src="https://img.shields.io/badge/Watch_Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube Demo">
   </a>
 </div>
