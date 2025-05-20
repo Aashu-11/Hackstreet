@@ -195,29 +195,6 @@ Our system processes abstracts through multiple layers of analysis to match sema
   <img src="https://capsule-render.vercel.app/api?type=waving&color=0:EEFF00,100:a82da8&height=100&section=divider&text=Setup%20Instructions&fontSize=30&fontColor=white">
 </div>
 
-## 🛠️ Setup Instructions
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/journalsense.git
-
-# Navigate to the project directory
-cd journalsense
-
-# Create and activate virtual environment
-python -m venv venv
-source venv/bin/activate   # On Windows, use: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your API keys
-
-# Run the application
-streamlit run app.py
-```
 
 ## ✨ Contributors
 
@@ -243,18 +220,9 @@ streamlit run app.py
 ## 🔗 Useful Links
 
 <div align="center">
-  <a href="https://journalsense-demo.streamlit.app/">
+  <a href="[https://journalsense-demo.streamlit.app/](https://journalsense.vercel.app/)">
     <img src="https://img.shields.io/badge/Live_Demo-00B0FF?style=for-the-badge&logo=streamlit&logoColor=white" alt="Live Demo">
-  </a>
-  <a href="https://openalex.org/">
-    <img src="https://img.shields.io/badge/OpenAlex_API-8A4182?style=for-the-badge&logo=database&logoColor=white" alt="OpenAlex API">
-  </a>
-  <a href="https://www.semanticscholar.org/product/api">
-    <img src="https://img.shields.io/badge/Semantic_Scholar_API-1857B8?style=for-the-badge&logo=semantic-web&logoColor=white" alt="Semantic Scholar API">
-  </a>
-  <a href="https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini">
-    <img src="https://img.shields.io/badge/Google_Gemini_API-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Google Gemini API">
-  </a>
+  </a>o
 </div>
 
 <!-- Animated Divider -->
