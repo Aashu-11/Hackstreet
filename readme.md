@@ -188,11 +188,6 @@ Our system processes abstracts through multiple layers of analysis to match sema
 </div>
 
 <!-- Animated Divider -->
-<div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:EEFF00,100:a82da8&height=100&section=divider&text=Setup%20Instructions&fontSize=30&fontColor=white">
-</div>
-
-<!-- Animated Divider -->
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" alt="Divider">
 
 
