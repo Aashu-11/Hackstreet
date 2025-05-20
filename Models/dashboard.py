@@ -9,7 +9,7 @@ import time
 
 # Set page configuration
 st.set_page_config(
-    page_title="OpenAlex Scholarly Dashboard",
+    page_title="Scholarly Dashboard",
     page_icon="📚",
     layout="wide",
     initial_sidebar_state="expanded"
