@@ -60,7 +60,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description, del
           if (title === "Journal Suggestions") {
             window.location.href = "https://corefunctionality.streamlit.app/";
           } else if (title === "Trending Analysis") {
-            window.location.href = "https://dashboardforanalysis.streamlit.app/";
+            window.location.href = "https://sampledeploy-dzlxwyrzad4sfehrqexq5i.streamlit.app/";
           }else if(title === "Smart Search"){
             window.location.href = "https://keywordfinder.streamlit.app/";
           }else if(title === "MesmerizeAbstractBot"){
