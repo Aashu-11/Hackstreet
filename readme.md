@@ -192,24 +192,6 @@ Our system processes abstracts through multiple layers of analysis to match sema
   <img src="https://capsule-render.vercel.app/api?type=waving&color=0:EEFF00,100:a82da8&height=100&section=divider&text=Setup%20Instructions&fontSize=30&fontColor=white">
 </div>
 
-
-## ✨ Contributors
-
-<div align="center">
-  <a href="https://github.com/contributor1">
-    <img src="https://via.placeholder.com/100x100.png?text=Dev+1" width="100px" alt="Contributor 1">
-  </a>
-  <a href="https://github.com/contributor2">
-    <img src="https://via.placeholder.com/100x100.png?text=Dev+2" width="100px" alt="Contributor 2">
-  </a>
-  <a href="https://github.com/contributor3">
-    <img src="https://via.placeholder.com/100x100.png?text=Dev+3" width="100px" alt="Contributor 3">
-  </a>
-  <a href="https://github.com/contributor4">
-    <img src="https://via.placeholder.com/100x100.png?text=Dev+4" width="100px" alt="Contributor 4">
-  </a>
-</div>
-
 <!-- Animated Divider -->
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" alt="Divider">
 
