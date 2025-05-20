@@ -220,7 +220,7 @@ Our system processes abstracts through multiple layers of analysis to match sema
 ## 🔗 Useful Links
 
 <div align="center">
-  <a href="[https://journalsense-demo.streamlit.app/](https://journalsense.vercel.app/)">
+  <a href="https://journalsense.vercel.app/">
     <img src="https://img.shields.io/badge/Live_Demo-00B0FF?style=for-the-badge&logo=streamlit&logoColor=white" alt="Live Demo">
   </a>o
 </div>
