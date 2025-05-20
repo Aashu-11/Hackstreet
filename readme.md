@@ -1,21 +1,9 @@
 <div align="center">
   
   <!-- Header Animation Placeholder -->
-  <img src="https://github.com/DenverCoder1/readme-typing-svg?lines=JournalSense;Your+AI+Research+Assistant+Platform&center=true&width=600&height=120&color=f75c7e&vCenter=true&size=45&pause=1000" width="100%" alt="JournalSense Banner">
-
-  <!-- Animated Banner -->
-  <img src="/lovable-uploads/b0ab8f53-7387-4085-9c22-443a8fdba5b3.png" alt="JournalSense Banner" width="80%">
   
   <h1>✨ JournalSense ✨</h1>
   <h3><em>Where every great idea finds its perfect stage.</em></h3>
-
-  <!-- Badges -->
-  <p>
-    <img src="https://img.shields.io/badge/Status-In_Development-blue?style=for-the-badge&logo=github" alt="Status">
-    <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
-    <img src="https://img.shields.io/badge/Made_with-AI_Powered-purple?style=for-the-badge&logo=ai" alt="AI Powered">
-    <img src="https://img.shields.io/badge/Language-Python-yellow?style=for-the-badge&logo=python" alt="Language">
-  </p>
 
 </div>
 
