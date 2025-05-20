@@ -124,7 +124,6 @@ Our system processes abstracts through multiple layers of analysis to match sema
 - **Semantic Understanding**: Building accurate topic models across diverse scientific fields
 - **Embedding Quality**: Developing embeddings that capture nuanced differences between similar research domains
 - **Performance Optimization**: Scaling our similarity search for real-time recommendations
-- **Balancing Factors**: Weighting impact factors, submission requirements, and content relevance
 
 <!-- Animated Divider -->
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" alt="Divider">
