@@ -109,11 +109,9 @@ Our system processes abstracts through multiple layers of analysis to match sema
 | Feature | Description |
 |---------|-------------|
 | <img src="https://img.shields.io/badge/AI-Powered_Matching-blueviolet?style=flat-square"> | Our algorithm analyzes your paper's content against 10,000+ academic journals |
-| <img src="https://img.shields.io/badge/Smart-Impact_Analysis-blue?style=flat-square"> | Get insights into journal impact factors and acceptance rates |
 | <img src="https://img.shields.io/badge/Auto-Keywords-green?style=flat-square"> | Automatically extract the most relevant keywords from your abstract |
 | <img src="https://img.shields.io/badge/Abstract-Polish-orange?style=flat-square"> | Get suggestions to enhance your abstract while maintaining scientific integrity |
 | <img src="https://img.shields.io/badge/Trend-Analysis-red?style=flat-square"> | See what topics are trending in your target journals |
-| <img src="https://img.shields.io/badge/Submission-Guidelines-yellow?style=flat-square"> | Receive journal-specific formatting and submission requirements |
 
 </div>
 
