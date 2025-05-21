@@ -167,8 +167,7 @@ Our system processes abstracts through multiple layers of analysis to match sema
 <div align="center">
   <table>
     <tr>
-      <td><img src="![5](https://github.com/user-attachments/assets/835ea823-08e2-4c49-8dca-e80514a2d5ae)"
- alt="Dashboard"></td>
+      <td>![5](https://github.com/user-attachments/assets/835ea823-08e2-4c49-8dca-e80514a2d5ae)</td>
       <td><img src="https://via.placeholder.com/400x225.png?text=Abstract+Analysis+View" alt="Abstract Analysis"></td>
     </tr>
     <tr>
