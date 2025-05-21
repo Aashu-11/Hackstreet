@@ -167,7 +167,8 @@ Our system processes abstracts through multiple layers of analysis to match sema
 <div align="center">
   <table>
     <tr>
-      <td><img src="https://via.placeholder.com/400x225.png?text=Journal+Recommendation+Dashboard" alt="Dashboard"></td>
+      <td><img src="![5](https://github.com/user-attachments/assets/835ea823-08e2-4c49-8dca-e80514a2d5ae)"
+ alt="Dashboard"></td>
       <td><img src="https://via.placeholder.com/400x225.png?text=Abstract+Analysis+View" alt="Abstract Analysis"></td>
     </tr>
     <tr>
@@ -180,7 +181,7 @@ Our system processes abstracts through multiple layers of analysis to match sema
 ## 📺 Demo Video
 
 <div align="center">
-  <a href="https://youtu.be/Iufg7Jv1BSw">
+  <a href="https://youtu.be/uFNCtUuNHvA">
     <img src="https://img.shields.io/badge/Watch_Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube Demo">
   </a>
 </div>
