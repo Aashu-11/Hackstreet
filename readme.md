@@ -162,20 +162,7 @@ Our system processes abstracts through multiple layers of analysis to match sema
 <!-- Animated Divider -->
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
-## 📸 Demo Screenshots
 
-<div align="center">
-  <table>
-    <tr>
-      ![5](https://github.com/user-attachments/assets/835ea823-08e2-4c49-8dca-e80514a2d5ae)
-      <td><img src="https://via.placeholder.com/400x225.png?text=Abstract+Analysis+View" alt="Abstract Analysis"></td>
-    </tr>
-    <tr>
-      <td><img src="https://via.placeholder.com/400x225.png?text=Journal+Comparison+Tool" alt="Journal Comparison"></td>
-      <td><img src="https://via.placeholder.com/400x225.png?text=Keyword+Optimization" alt="Keyword Tool"></td>
-    </tr>
-  </table>
-</div>
 
 ## 📺 Demo Video
 
